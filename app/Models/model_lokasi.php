@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Inventaris;
 
-class Lokasi extends Model
+class model_lokasi extends Model
 {
     use HasFactory;
 
@@ -17,9 +16,4 @@ class Lokasi extends Model
         'kode_lokasi',
         'keterangan',
     ];
-
-    public function inventaris()
-    {
-        return $this->hasMany(Inventaris::class, 'id_lokasi');
-    }
 }

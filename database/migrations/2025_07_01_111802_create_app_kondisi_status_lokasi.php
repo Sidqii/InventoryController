@@ -11,10 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('app_kondisi', function (Blueprint $table) {
+            $table->id();
+            $table->string('kondisi');
+            $table->timestamps();
+        });
+        Schema::create('app_status', function (Blueprint $table) {
+            $table->id();
+            $table->string('status');
+            $table->timestamps();
+        });
         Schema::create('app_lokasi', function (Blueprint $table) {
             $table->id();
             $table->string('nama_lokasi');
-            $table->string('kode_lokasi')->unique();
+            $table->string('kode_lokasi');
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });
@@ -25,6 +35,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('app_kondisi');
+        Schema::dropIfExists('app_status');
         Schema::dropIfExists('app_lokasi');
     }
 };

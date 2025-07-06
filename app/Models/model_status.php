@@ -5,18 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class model_status extends Model
 {
     use HasFactory;
 
     protected $table = 'app_status';
 
-    protected $fillable = [
-        'status'
-    ];
-
-    public function inventaris()
-    {
-        return $this->hasMany(Inventaris::class, 'id_status');
-    }
+    protected $fillable = ['status'];
 }
