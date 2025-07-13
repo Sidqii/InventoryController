@@ -106,15 +106,32 @@ class ctrl_barang extends Controller
 
             // --- handle spesifikasi_teknis (JSON kolom) ---
             if ($root === 'spesifikasi_teknis') {
-                $current = json_decode($barang->spesifikasi_teknis, true) ?? [];
 
-                if ($op['op'] === 'remove') {
-                    unset($current[$segments[1]]);
-                } else { // add | replace
-                    $current[$segments[1]] = $op['value'] ?? null;
+                // $current = json_decode($barang->spesifikasi_teknis ?? '{}', true) ?? [];
+
+                $current = is_array($barang->spesifikasi_teknis)
+                    ? $barang->spesifikasi_teknis
+                    : json_decode($barang->spesifikasi_teknis ?? '{}', true) ?? [];
+
+
+                if (!is_array($current)) {
+                    $current = [];
                 }
 
-                $barang->spesifikasi_teknis = json_encode($current); // pastikan string
+                if (count($segments) < 2) {
+                    return response()->json(['message' => 'Key spesifikasi tidak valid'], 400);
+                }
+
+                $spacekey = $segments[1];
+
+                if ($op['op'] === 'remove') {
+                    unset($current[$spacekey]);
+                } else { // add | replace
+                    $current[$spacekey] = $op['value'] ?? null;
+                }
+
+                // $barang->spesifikasi_teknis = json_encode($current, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                $barang->spesifikasi_teknis = $current;
                 continue;
             }
 
