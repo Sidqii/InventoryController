@@ -16,25 +16,23 @@ class ctrl_pengajuan extends Controller
 
     public function store(Request $request)
     {
-        // Asumsikan id user dikirim lewat field 'user_id' dari frontend
-        $userId = $request->input('user_id');
+        $userId = $request->input('id_pengguna');
 
         $validated = $request->validate([
             'id_unit_barang' => 'required|exists:app_unit_barang,id',
             'hal' => 'required|string',
             'instansi' => 'nullable|string',
             'jumlah' => 'required|integer|min:1',
-            'tanggal_pinjam' => 'required|date',
+            'tanggal_pinjam' => 'nullable|date',
             'tanggal_kembali' => 'nullable|date|after_or_equal:tanggal_pinjam',
         ]);
 
         $tgl_pinjam = $validated['tanggal_pinjam'] ?? now()->toDateString();
 
-        // status pengajuan default = 1 (pending)
         $pengajuan = model_pengajuan::create([
             'id_unit_barang' => $validated['id_unit_barang'],
             'id_pengguna' => $userId,
-            'id_status' => 1, // pending
+            'id_status' => 1,
             'instansi' => $validated['instansi'] ?? null,
             'hal' => $validated['hal'],
             'jumlah' => $validated['jumlah'],
@@ -45,7 +43,6 @@ class ctrl_pengajuan extends Controller
         return response()->json([
             'message' => 'Pengajuan berhasil dibuat',
             'data' => $pengajuan
-        ], 201);
+        ], 200);
     }
-
 }
