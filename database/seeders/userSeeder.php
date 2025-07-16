@@ -15,18 +15,10 @@ class userSeeder extends Seeder
     {
         DB::table('app_user')->insert([
             [
-                'nama' => 'Admin Operator',
-                'email' => 'admin@mail.com',
-                'password' => Hash::make('admin123'),
+                'nama' => 'Enpio',
+                'email' => 'user@mail.com',
+                'password' => Hash::make('user123'),
                 'role_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'nama' => 'Staff A',
-                'email' => 'staff@mail.com',
-                'password' => Hash::make('staff123'),
-                'role_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

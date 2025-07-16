@@ -11,17 +11,17 @@ Route::middleware('api')->group(function () {
     Route::apiResource('login', ctrl_login::class);
 
     //barang API
-    Route::apiResource('barang', ctrl_barang::class);
     Route::patch('barang/{id}/6902', [ctrl_barang::class, 'patch']);
+    Route::apiResource('barang', ctrl_barang::class);
 
     //unit barang API
-    Route::apiResource('unitbarang', ctrl_unitbarang::class);
     Route::patch('unitbarang/{id}/6902', [ctrl_unitbarang::class, 'patch']);
+    Route::apiResource('unitbarang', ctrl_unitbarang::class);
 
     //pengajuan
+    Route::get('pengajuan/user/{id}', [ctrl_pengajuan::class, 'show']);
     Route::apiResource('pengajuan', ctrl_pengajuan::class);
 
     //persetujuan
-    // Route::patch('persetujuan/{id}/6902', [ctrl_persetujuan::class, 'patch']);
-    Route::apiResource('riwayat', ctrl_persetujuan::class);
+    Route::apiResource('persetujuan', ctrl_persetujuan::class);
 });
