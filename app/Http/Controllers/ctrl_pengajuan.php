@@ -23,7 +23,7 @@ class ctrl_pengajuan extends Controller
 
     public function show($id)
     {
-        $pengajuan = model_pengajuan::with(['status_pengajuan', 'unit_detail'])->where('id_pengguna', $id)->get();
+        $pengajuan = model_pengajuan::with(['status_pengajuan', 'user', 'unit_detail'])->where('id_pengguna', $id)->get();
 
         if ($pengajuan->isEmpty()) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
