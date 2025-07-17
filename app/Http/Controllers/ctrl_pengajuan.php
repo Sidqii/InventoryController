@@ -14,6 +14,10 @@ class ctrl_pengajuan extends Controller
     {
         $pengajuan = model_pengajuan::with(['status_pengajuan', 'user', 'unit_detail'])->get();
 
+        if ($pengajuan->isEmpty()) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
         return response()->json($pengajuan);
     }
 

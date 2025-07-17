@@ -23,6 +23,6 @@ class model_pengajuan_unit extends Model
 
     public function unit_barang()
     {
-        return $this->belongsTo(model_unitbarang::class, 'id_unit_barang');
+        return $this->belongsTo(model_unitbarang::class, 'id_unit_barang')->with('barang');
     }
 }
