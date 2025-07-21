@@ -23,5 +23,6 @@ Route::middleware('api')->group(function () {
     Route::apiResource('pengajuan', ctrl_pengajuan::class);
 
     //persetujuan
+    Route::patch('/persetujuan/{id}', [ctrl_persetujuan::class, 'update']);
     Route::apiResource('persetujuan', ctrl_persetujuan::class);
 });

@@ -41,6 +41,12 @@ class model_pengajuan extends Model
         return $this->hasMany(model_pengajuan_unit::class, 'id_pengajuan')->with('unit_barang');
     }
 
+    public function peminjam()
+    {
+        return $this->belongsTo(model_user::class, 'id_pengguna');
+    }
+
+
     public function user()
     {
         return $this->belongsTo(model_user::class, 'id_pengguna');

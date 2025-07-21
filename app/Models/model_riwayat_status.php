@@ -30,6 +30,11 @@ class model_riwayat_status extends Model
         return $this->belongsTo(model_unitbarang::class, 'id_unit_barang');
     }
 
+    public function pengajuan()
+    {
+        return $this->belongsTo(model_pengajuan::class, 'id_pengajuan');
+    }
+
     public function jenis()
     {
         return $this->belongsTo(model_jenis_perubahan::class, 'id_jenis_perubahan');
