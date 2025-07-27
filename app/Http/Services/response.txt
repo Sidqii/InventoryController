@@ -1,0 +1,118 @@
+#Perubahan Kecil
+{
+    "nama_barang": "Drone Recon X6",
+    "kode_barang": "DRN-RCN-001",
+    "id_kategori": 1,
+    "id_jenis": 4,
+    "merk": "SkyHawk",
+    "deskripsi": "Drone untuk kebutuhan pemetaan dan observasi area di lingkungan",
+    "spesifikasi_teknis": {
+        "kamera": "Optical zoom 6x",
+        "jaringan": "5G",
+        "durasi_terbang": "60 menit"
+    },
+    "tanggal_pengadaan": "2024-08-30",
+    "masa_garansi": 12,
+    "sumber_pengadaan": "APBN",
+    "vendor": "PT TeknoSurya Kencana",
+    "catatan_perawatan": "Kalibrasi tiap 2 bulan" 
+}
+
+[
+  {
+    "op": "replace", "path": "/catatan_perawatan", "value": "Kalibrasi tiap 2 bulan"
+  }
+]
+
+#Perubahan Menengah
+{
+  "nama_barang": "Drone Recon X6",
+  "kode_barang": "DRN-RCN-001",
+  "id_kategori": 1,
+  "id_jenis": 4,
+  "merk": "SkyHawk",
+  "deskripsi": "Drone untuk kebutuhan pemetaan dan observasi area di lingkungan",
+  "spesifikasi_teknis": {
+    "kamera": "Optical zoom 8x",
+    "jaringan": "5G",
+    "durasi_terbang": "65 menit"
+  },
+  "tanggal_pengadaan": "2024-08-30",
+  "masa_garansi": 12,
+  "sumber_pengadaan": "APBN",
+  "vendor": "PT TeknoSurya Kencana",
+  "jumlah_total_unit": 3,
+  "catatan_perawatan": "Kalibrasi tiap 3 bulan"
+}
+
+[
+  {
+    "op": "replace", "path": "/catatan_perawatan", "value": "Kalibrasi tiap 3 bulan"
+  },
+  {
+    "op": "replace", "path": "/spesifikasi_teknis/kamera", "value": "Optical zoom 8x"
+  },
+  {
+    "op": "replace", "path": "/spesifikasi_teknis/durasi_terbang", "value": "65 menit"
+  }
+]
+
+#Perubahan Besar
+{
+  "nama_barang": "Drone Recon X7",
+  "kode_barang": "DRN-RCN-009",
+  "id_kategori": 1,
+  "id_jenis": 4,
+  "merk": "SkyPhantom",
+  "deskripsi": "Drone versi upgrade untuk misi taktis dan pemetaan",
+  "spesifikasi_teknis": {
+    "kamera": "Thermal + Optical zoom 10x",
+    "jaringan": "5G + Satellite",
+    "durasi_terbang": "90 menit"
+  },
+  "tanggal_pengadaan": "2024-12-01",
+  "masa_garansi": 24,
+  "sumber_pengadaan": "Hibah Internasional",
+  "vendor": "Global Aerial Tech",
+  "jumlah_total_unit": 5,
+  "catatan_perawatan": "Perawatan intensif tiap bulan"
+}
+
+[
+  {
+    "op": "replace", "path": "/nama_barang", "value": "Drone Recon X7"
+  },
+  {
+    "op": "replace", "path": "/kode_barang", "value": "DRN-RCN-009"
+  },
+  {
+    "op": "replace", "path": "/merk", "value": "SkyPhantom"
+  },
+  {
+    "op": "replace", "path": "/deskripsi", "value": "Drone versi upgrade untuk misi taktis dan pemetaan"
+  },
+  {
+    "op": "replace", "path": "/spesifikasi_teknis/kamera", "value": "Thermal + Optical zoom 10x"
+  },
+  {
+    "op": "replace", "path": "/spesifikasi_teknis/jaringan", "value": "5G + Satellite"
+  },
+  {
+    "op": "replace", "path": "/spesifikasi_teknis/durasi_terbang", "value": "90 menit"
+  },
+  {
+    "op": "replace", "path": "/masa_garansi", "value": 24
+  },
+  {
+    "op": "replace", "path": "/sumber_pengadaan", "value": "Hibah Internasional"
+  },
+  {
+    "op": "replace", "path": "/vendor", "value": "Global Aerial Tech"
+  },
+  {
+    "op": "replace", "path": "/jumlah_total_unit", "value": 5
+  },
+  {
+    "op": "replace", "path": "/catatan_perawatan", "value": "Perawatan intensif tiap bulan"
+  }
+]

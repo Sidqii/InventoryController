@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\model_barang;
 use App\Models\model_pengajuan;
 use App\Models\model_pengajuan_unit;
 use App\Models\model_unitbarang;
@@ -30,6 +31,19 @@ class ctrl_pengajuan extends Controller
         }
 
         return response()->json($pengajuan);
+    }
+
+    public function readyitem()
+    {
+        $data = model_barang::select('app_barang.*')
+            ->whereIn('id', function ($query) {
+                $query->select('id_barang')
+                    ->from('app_unit_barang')
+                    ->where('id_status', 1);
+            })
+            ->get();
+
+        return response()->json($data);
     }
 
 

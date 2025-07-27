@@ -46,7 +46,7 @@ class ctrl_persetujuan extends Controller
                 'id_unit_barang' => $unit->id_unit_barang,
                 'id_jenis_perubahan' => 1,
                 'status_awal' => $statusLama,
-                'status_baru' => $request->id_status_unit, // ⬅️ status unit
+                'status_baru' => $request->id_status_unit, // status unit
                 'lokasi_awal' => $unit->unit_barang->id_lokasi ?? null,
                 'lokasi_baru' => null,
                 'tanggal' => now(),
@@ -57,11 +57,10 @@ class ctrl_persetujuan extends Controller
             ]);
 
             $unit->unit_barang->update([
-                'id_status' => $request->id_status_unit // ⬅️ update status unit
+                'id_status' => $request->id_status_unit // update status unit
             ]);
         }
 
-        // ⬅️ Update status pengajuan di luar loop
         $pengajuan->id_status = $request->id_status_pengajuan;
         $pengajuan->save();
 

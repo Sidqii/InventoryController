@@ -48,4 +48,8 @@ class model_unitbarang extends Model
     {
         return $this->belongsTo(model_kepemilikan::class, 'id_kepemilikan');
     }
+
+    public function pengajuan(){
+        return $this->hasOne(model_pengajuan_unit::class, 'id_unit_barang');
+    }
 }

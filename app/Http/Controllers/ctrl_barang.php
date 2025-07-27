@@ -51,6 +51,42 @@ class ctrl_barang extends Controller
         return response()->json($barang);
     }
 
+    public function merge(Request $request, $id)
+    {
+        $barang = model_barang::find($id);
+
+        if (!$barang) {
+            return response()->json(['message' => 'Barang tidak ditemukan'], 404);
+        }
+
+        $data = $request->only([
+            'nama_barang',
+            'kode_barang',
+            'id_kategori',
+            'id_jenis',
+            'merk',
+            'deskripsi',
+            'spesifikasi_teknis',
+            'tanggal_pengadaan',
+            'masa_garansi',
+            'sumber_pengadaan',
+            'vendor',
+            'catatan_perawatan',
+            'status_aktif'
+        ]);
+
+        if (isset($data['spesifikasi_teknis']) && is_array($data['spesifikasi_teknis'])) {
+            $data['spesifikasi_teknis'] = $data['spesifikasi_teknis'];
+        }
+
+        $barang->update($data);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Barang berhasil diperbarui (merge)',
+        ]);
+    }
+
     public function update(Request $request, $id)
     {
         $barang = model_barang::find($id);
@@ -96,7 +132,6 @@ class ctrl_barang extends Controller
         }
 
         foreach ($ops as $op) {
-            // Minimal validasi
             if (!isset($op['op'], $op['path']))
                 continue;
 
@@ -104,10 +139,7 @@ class ctrl_barang extends Controller
             $segments = explode('/', $path);
             $root = $segments[0];
 
-            // --- handle spesifikasi_teknis (JSON kolom) ---
             if ($root === 'spesifikasi_teknis') {
-
-                // $current = json_decode($barang->spesifikasi_teknis ?? '{}', true) ?? [];
 
                 $current = is_array($barang->spesifikasi_teknis)
                     ? $barang->spesifikasi_teknis
@@ -126,20 +158,18 @@ class ctrl_barang extends Controller
 
                 if ($op['op'] === 'remove') {
                     unset($current[$spacekey]);
-                } else { // add | replace
+                } else {
                     $current[$spacekey] = $op['value'] ?? null;
                 }
 
-                // $barang->spesifikasi_teknis = json_encode($current, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 $barang->spesifikasi_teknis = $current;
                 continue;
             }
 
-            // --- handle kolom biasa & pastikan fillable ---
             if (in_array($root, $barang->getFillable())) {
                 if ($op['op'] === 'remove') {
                     $barang->{$root} = null;
-                } else { // add | replace
+                } else {
                     $barang->{$root} = $op['value'] ?? null;
                 }
             }
