@@ -132,46 +132,33 @@ class ctrl_barang extends Controller
         }
 
         foreach ($ops as $op) {
-            if (!isset($op['op'], $op['path']))
+            if (($op['op'] ?? '') !== 'replace' || !isset($op['path'], $op['value'])) {
                 continue;
+            }
 
             $path = trim($op['path'], '/');
             $segments = explode('/', $path);
-            $root = $segments[0];
+            $field = $segments[0];
 
-            if ($root === 'spesifikasi_teknis') {
-
+            // Tangani spesifikasi_teknis
+            if ($field === 'spesifikasi_teknis' && isset($segments[1])) {
+                $key = $segments[1];
                 $current = is_array($barang->spesifikasi_teknis)
                     ? $barang->spesifikasi_teknis
-                    : json_decode($barang->spesifikasi_teknis ?? '{}', true) ?? [];
-
+                    : json_decode($barang->spesifikasi_teknis ?? '{}', true);
 
                 if (!is_array($current)) {
                     $current = [];
                 }
 
-                if (count($segments) < 2) {
-                    return response()->json(['message' => 'Key spesifikasi tidak valid'], 400);
-                }
-
-                $spacekey = $segments[1];
-
-                if ($op['op'] === 'remove') {
-                    unset($current[$spacekey]);
-                } else {
-                    $current[$spacekey] = $op['value'] ?? null;
-                }
-
+                $current[$key] = $op['value'];
                 $barang->spesifikasi_teknis = $current;
                 continue;
             }
 
-            if (in_array($root, $barang->getFillable())) {
-                if ($op['op'] === 'remove') {
-                    $barang->{$root} = null;
-                } else {
-                    $barang->{$root} = $op['value'] ?? null;
-                }
+            // Tangani field biasa
+            if (in_array($field, $barang->getFillable())) {
+                $barang->{$field} = $op['value'];
             }
         }
 
@@ -179,8 +166,8 @@ class ctrl_barang extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Barang berhasil diperbarui (patch)',
-        ], 200);
+            'message' => 'Barang berhasil diperbarui (replace)',
+        ]);
     }
 
     public function destroy($id)
