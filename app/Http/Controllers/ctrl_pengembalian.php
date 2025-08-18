@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\model_pengajuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\model_pengajuan_unit;
 use App\Models\model_riwayat_status;
 use App\Models\model_unitbarang;
+use Illuminate\Support\Carbon;
 
 class ctrl_pengembalian extends Controller
 {
-    public function update(Request $request, $id)
+    private int $STATUS_UNIT_AKTIF = 1;
+    private int $STATUS_UNIT_PINJAM = 2;
+    private int $STATUS_PENGAJUAN_RETURNED = 5;
+
+    public function update(Request $request, $id_unit)
     {
         $request->validate([
             'id_jenis_perubahan' => 'required|exists:app_jenis_perubahan,id',
@@ -18,33 +26,74 @@ class ctrl_pengembalian extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        // Ambil data unit berdasarkan ID (dari app_unit_barang)
-        $unit = model_unitbarang::with('pengajuan')->findOrFail($id);
+        if ((int) $request->id_status_unit !== $this->STATUS_UNIT_AKTIF) {
+            return response()->json(['message' => 'Status unti pengembalian bukan aktif (1)'], 422);
+        }
 
-        $statusAwal = $unit->id_status;
+        $now = Carbon::now();
 
-        // Update status unit
-        $unit->update([
-            'id_status' => $request->id_status_unit,
-        ]);
+        return DB::transaction(function () use ($id_unit, $request, $now) {
+            $unit = model_unitbarang::where('id', $id_unit)->lockForUpdate()->firstOrFail();
 
-        // Simpan ke riwayat
-        model_riwayat_status::create([
-            'id_unit_barang' => $unit->id,
-            'id_jenis_perubahan' => $request->id_jenis_perubahan,
-            'status_awal' => $statusAwal,
-            'status_baru' => $request->id_status_unit,
-            'lokasi_awal' => $unit->id_lokasi,
-            'lokasi_baru' => $unit->id_lokasi, // diasumsikan tidak pindah
-            'tanggal' => now(),
-            'oleh' => $request->id_user,
-            'catatan' => $request->catatan,
-            'lampiran' => null,
-            'id_pengajuan' => $unit->pengajuan_unit->id_pengajuan ?? null,
-        ]);
+            $statusAwal = (int) $unit->id_status;
+            $lokasiAwal = $unit->id_lokasi;
 
-        return response()->json([
-            'message' => 'Pengembalian barang berhasil dicatat.',
-        ]);
+            if ($statusAwal !== $this->STATUS_UNIT_PINJAM) {
+                return response()->json(['message' => 'Unit tidak dalam status dipinjam.'], 422);
+            }
+
+            $detail = model_pengajuan_unit::where('id_unit_barang', $unit->id)->whereNull('returned_at')->lockForUpdate()->latest('id')->first();
+
+            if (!$detail) {
+                return response()->json(['message' => 'Tidak ada pengajuan unit aktif'], 422);
+            }
+
+            $unit->id_status = $this->STATUS_UNIT_AKTIF;
+            $unit->updated_at = $now;
+            $unit->save();
+
+            $detail->returned_at = $now;
+            $detail->updated_at = $now;
+            $detail->save();
+
+            model_riwayat_status::create([
+                'id_unit_barang' => $unit->id,
+                'id_jenis_perubahan' => (int) $request->id_jenis_perubahan,
+                'status_awal' => $statusAwal,
+                'status_baru' => $this->STATUS_UNIT_AKTIF,
+                'lokasi_awal' => $lokasiAwal,
+                'lokasi_baru' => $lokasiAwal,
+                'tanggal' => $now,
+                'oleh' => (int) $request->id_user,
+                'catatan' => $request->catatan,
+                'lampiran' => null,
+                'id_pengajuan' => $detail->id_pengajuan,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+
+            $pengajuan = model_pengajuan::where('id', $detail->id_pengajuan)->lockForUpdate()->first();
+            if ($pengajuan) {
+                $masihAdaYangBelumKembali = model_pengajuan_unit::where('id_pengajuan', $pengajuan->id)
+                    ->whereNull('returned_at')
+                    ->exists();
+
+                if (!$masihAdaYangBelumKembali) {
+                    $pengajuan->id_status = $this->STATUS_PENGAJUAN_RETURNED; // 5
+                    $pengajuan->updated_at = $now;
+                    $pengajuan->save();
+                }
+            }
+
+            return response()->json([
+                'message' => 'Pengembalian barang berhasil dicatat.',
+                'data' => [
+                    'id_unit_barang' => $unit->id,
+                    'id_pengajuan' => $detail->id_pengajuan,
+                    'returned_at' => $now->toDateTimeString(),
+                    'status_after' => $this->STATUS_UNIT_AKTIF,
+                ]
+            ], 200);
+        });
     }
 }

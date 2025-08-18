@@ -5,6 +5,7 @@ use App\Http\Controllers\ctrl_login;
 use App\Http\Controllers\ctrl_pengajuan;
 use App\Http\Controllers\ctrl_pengembalian;
 use App\Http\Controllers\ctrl_persetujuan;
+use App\Http\Controllers\ctrl_unit_ready;
 use App\Http\Controllers\ctrl_unitbarang;
 
 Route::middleware('api')->group(function () {
@@ -17,6 +18,7 @@ Route::middleware('api')->group(function () {
     Route::apiResource('barang', ctrl_barang::class);
 
     //unit barang API
+    Route::get('/unit/tersedia', [ctrl_unit_ready::class, 'index']);
     Route::patch('/unitbarang/{id}/patch', [ctrl_unitbarang::class, 'patch']);
     Route::apiResource('unitbarang', ctrl_unitbarang::class);
 

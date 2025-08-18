@@ -40,8 +40,7 @@ class ctrl_pengajuan extends Controller
                 $query->select('id_barang')
                     ->from('app_unit_barang')
                     ->where('id_status', 1);
-            })
-            ->get();
+            })->get();
 
         return response()->json($data);
     }

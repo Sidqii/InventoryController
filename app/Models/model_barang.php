@@ -56,4 +56,9 @@ class model_barang extends Model
     {
         return $this->hasMany(model_unitbarang::class, 'id_barang');
     }
+
+    public function unit_ready()
+    {
+        return $this->hasMany(model_unitbarang::class, 'id_barang')->where('id_status', 1);
+    }
 }
