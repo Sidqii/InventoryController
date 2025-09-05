@@ -28,7 +28,8 @@ Route::post('pengajuan/{id}/ajukan-pengembalian', [AppTaskController::class, 'aj
 Route::post('pengajuan/{id}/proses-pengembalian', [AppTaskController::class, 'prosesPengembalian']);
 
 //get pengembalian
-Route::get('/pengembalian', [AppTaskController::class, 'indexPengembalian']);
+Route::get('/pengembalian', [AppTaskController::class, 'indexRiwayat']);
+Route::get('/pengembalian/{id}', [AppTaskController::class, 'showPengembalian']);
 
 //user data
 Route::apiResource('/user', AppUsersController::class);
@@ -46,11 +47,15 @@ Route::get('/barang', [AppBarangController::class, 'index']);
 Route::get('/barang/{id}', [AppBarangController::class, 'show']);
 
 //data unit barang
+Route::get('/staff/unit', [AppUnitBarangController::class, 'indexStaff']);
 Route::apiResource('/unit', AppUnitBarangController::class);
 
+//riwayat
+Route::get('/riwayat/{id}', [AppPengajuanController::class, 'all']);
+Route::apiResource('/pengajuan', AppPengajuanController::class);
+
 //lainnya
+// Route::apiResource('/riwayat', AppRiwayatStatusController::class);
 Route::apiResource('/jenis', AppJenisController::class);
 Route::apiResource('/kategori', AppKategoriController::class);
-Route::apiResource('/pengajuan', AppPengajuanController::class);
-Route::apiResource('/riwayat', AppRiwayatStatusController::class);
 Route::apiResource('/unit_pengajuan', AppPengajuanUnitController::class);

@@ -26,6 +26,24 @@ class AppUnitBarangController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function indexStaff()
+    {
+        $data = AppUnitBarang::with([
+            'barang',
+            'kepemilikan',
+            'status',
+            'lokasi',
+            'kondisi',
+            // 'pengajuan',
+            // 'riwayat',
+        ])->where('id_status', 1)->get();
+
+        return response()->json($data);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

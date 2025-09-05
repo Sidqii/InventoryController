@@ -41,8 +41,7 @@ class AppRiwayatStatusController extends Controller
             'id_pengajuan' => 'nullable|exists:app_pengajuan,id',
             'status_awal' => 'nullable|exists:app_status,id',
             'status_baru' => 'nullable|exists:app_status,id',
-            'lokasi_awal' => 'nullable|exists:app_lokasi,id',
-            'lokasi_baru' => 'nullable|exists:app_lokasi,id',
+            'lokasi_unit' => 'nullable|exists:app_lokasi,id',
             'tanggal' => 'nullable|date',
             'catatan' => 'nullable|string',
         ]);
@@ -52,8 +51,7 @@ class AppRiwayatStatusController extends Controller
             'id_pengajuan' => $validated['id_pengajuan'],
             'status_awal' => $validated['status_awal'],
             'status_baru' => $validated['status_baru'],
-            'lokasi_awal' => $validated['lokasi_awal'],
-            'lokasi_baru' => $validated['lokasi_baru'],
+            'lokasi_unit' => $validated['lokasi_unit'],
             'tanggal' => $validated['tanggal'] ?? now(),
             'catatan' => $validated['catatan'] ?? null,
         ]);
@@ -64,8 +62,7 @@ class AppRiwayatStatusController extends Controller
                 'unitBarang.barang',
                 'statusAwal',
                 'statusBaru',
-                'lokasiAwal',
-                'lokasiBaru',
+                'lokasiUnit',
                 'pengajuan',
             ])
         ]);
@@ -80,10 +77,11 @@ class AppRiwayatStatusController extends Controller
             'unitBarang.barang',
             'statusAwal',
             'statusBaru',
-            'lokasiAwal',
-            'lokasiBaru',
+            'lokasiUnit',
             'pengajuan',
-        ])->findOrFail($id);
+        ])->whereHas('pengajuan', function ($q) use ($id) {
+            $q->where('id_pengguna', $id);
+        })->get();
 
         return response()->json($data);
     }

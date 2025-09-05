@@ -97,9 +97,39 @@ class AppTaskController extends Controller
 
     public function indexPengembalian()
     {
-        $pengembalian = AppPengajuan::with(['unitBarang.barang', 'unitBarang.kondisi', 'status'])->whereHas('status', function ($q) {
-            $q->where('status', 'Disetujui');
-        })->get();
+        $pengembalian = AppPengajuan::with(['unitBarang.barang', 'unitBarang.kondisi', 'status'])
+            ->whereHas('status', function ($q) {
+                $q->where('status', 'Disetujui');
+            })->get();
+
+        $data = $pengembalian->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'kode_pinjam' => 'Pengajuan #' . str_pad($item->id, 3, '0', STR_PAD_LEFT), //kode untuk id pengajuan => Pengajuan #00..$id
+                'nama_barang' => $item->unitBarang->first()?->barang?->nama_barang ?? '-',
+                'status' => $item->status->status === 'Disetujui' ? 'Dipinjam' : ($item->status->status ?? '-'),
+                'pengembalian' => $item->tgl_kembali,
+                'unit' => $item->unitBarang->map(function ($unit) {
+                    return [
+                        'id' => $unit->id,
+                        'kode_unit' => $unit->kode_unit,
+                        'no_seri' => $unit->no_seri,
+                        'kondisi' => $unit->kondisi,
+                    ];
+                })
+            ];
+        });
+
+        return response()->json($data, 200);
+    }
+
+    public function showPengembalian($id)
+    {
+        $pengembalian = AppPengajuan::with(['unitBarang.barang', 'unitBarang.kondisi', 'status'])
+            ->where('id_pengguna', $id)
+            ->whereHas('status', function ($q) {
+                $q->where('status', 'Disetujui');
+            })->get();
 
         $data = $pengembalian->map(function ($item) {
             return [

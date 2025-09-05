@@ -70,10 +70,29 @@ class AppPengajuanController extends Controller
     {
         $data = AppPengajuan::with([
             'user',
-            'unitBarang',
+            'unitBarang.barang',
+            'unitBarang.kondisi',
             'status',
             'riwayat'
-        ])->findOrFail($id);
+        ])->where('id_pengguna', $id)->whereHas('status', function ($q) {
+            $q->where('status', 'Disetujui');
+        })->get();
+
+        return response()->json($data);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function all($id)
+    {
+        $data = AppPengajuan::with([
+            'user',
+            'unitBarang.barang',
+            'unitBarang.kondisi',
+            'status',
+            'riwayat'
+        ])->where('id_pengguna', $id)->get();
 
         return response()->json($data);
     }
