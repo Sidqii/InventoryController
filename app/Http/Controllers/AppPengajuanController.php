@@ -47,7 +47,7 @@ class AppPengajuanController extends Controller
 
         $pengajuan = AppPengajuan::create([
             'id_pengguna' => $validated['id_pengguna'],
-            'id_status' => 1,
+            'id_status' => 7,
             'instansi' => $validated['instansi'],
             'hal' => $validated['hal'],
             'tgl_pinjam' => $validated['tgl_pinjam'],
