@@ -35,12 +35,12 @@ class AppRiwayatStatus extends Model
 
     public function statusAwal()
     {
-        return $this->belongsTo(AppStatus::class, 'status_awal');
+        return $this->belongsTo(AppStatusUnit::class, 'status_awal');
     }
 
     public function statusBaru()
     {
-        return $this->belongsTo(AppStatus::class, 'status_baru');
+        return $this->belongsTo(AppStatusUnit::class, 'status_baru');
     }
 
     public function lokasiUnit()

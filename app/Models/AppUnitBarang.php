@@ -35,7 +35,7 @@ class AppUnitBarang extends Model
 
     public function status()
     {
-        return $this->belongsTo(AppStatus::class, 'id_status');
+        return $this->belongsTo(AppStatusUnit::class, 'id_status');
     }
 
     public function lokasi()

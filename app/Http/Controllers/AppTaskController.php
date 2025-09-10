@@ -40,61 +40,6 @@ class AppTaskController extends Controller
         }
     }
 
-    public function persetujuan(Request $request, $id)
-    {
-        try {
-            $request->validate([
-                'status_id' => 'required|integer|exists:app_status,id',
-                'catatan' => 'nullable|string',
-            ]);
-
-            $statusPengajuanId = $request->status_id;
-            $catatan = $request->catatan;
-
-            $mapUnit = [
-                3 => 2, //disetujui => dipinjam
-                4 => 1, //ditolak => tersedia
-                5 => 5, //perawatan => perawatan
-                6 => 6, //perbaikan => perbaikan
-                8 => 1, //dikembalikan => tersedia
-            ];
-
-            $statusBaru = $mapUnit[$statusPengajuanId] ?? null;
-
-            $pengajuan = AppPengajuan::with('unitBarang')->findOrFail($id);
-            $pengajuan->id_status = $statusPengajuanId;
-            $pengajuan->save();
-
-            foreach ($pengajuan->unitBarang as $unit) {
-                $statusAwal = $unit->id_status;
-
-                if ($statusBaru) {
-                    $unit->id_status = $statusBaru;
-                    $unit->save();
-                }
-
-                AppRiwayatStatus::create([
-                    'id_unit_barang' => $unit->id,
-                    'id_pengajuan' => $pengajuan->id,
-                    'status_awal' => $statusAwal,
-                    'status_baru' => $statusBaru,
-                    'lokasi_unit' => $unit->id_lokasi,
-                    'oleh' => Auth::id(),
-                    'catatan' => $catatan,
-                ]);
-            }
-
-            return response()->json([
-                'message' => 'Persetujuan berhasil diproses',
-                'data' => $pengajuan->load('unitBarang'),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
     public function indexPengembalian()
     {
         $pengembalian = AppPengajuan::with(['unitBarang.barang', 'unitBarang.kondisi', 'status'])
@@ -150,26 +95,6 @@ class AppTaskController extends Controller
         });
 
         return response()->json($data, 200);
-    }
-
-
-    public function ajukanPengembalian(Request $request, $id)
-    {
-        try {
-            $pengajuan = AppPengajuan::with('unitBarang')->findOrFail($id);
-
-            $pengajuan->id_status = 7;
-            $pengajuan->save();
-
-            return response()->json([
-                'message' => 'Pengembalian diajukan, menunggu verifikasi',
-                'data' => $pengajuan,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ]);
-        }
     }
 
     public function prosesPengembalian(Request $request, $id)

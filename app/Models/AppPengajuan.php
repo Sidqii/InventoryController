@@ -34,7 +34,7 @@ class AppPengajuan extends Model
 
     public function status()
     {
-        return $this->belongsTo(AppStatus::class, 'id_status');
+        return $this->belongsTo(AppStatusPengajuan::class, 'id_status');
     }
 
     public function riwayat()

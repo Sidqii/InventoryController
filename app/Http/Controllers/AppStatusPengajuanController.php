@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\AppStatus;
+use App\Models\AppStatusPengajuan;
 use Illuminate\Http\Request;
 
-class AppStatusController extends Controller
+class AppStatusPengajuanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = AppStatus::all();
+        $data = AppStatusPengajuan::all();
 
         return response()->json($data);
     }
@@ -30,7 +31,7 @@ class AppStatusController extends Controller
      */
     public function store(Request $request)
     {
-        $data = AppStatus::create($request->all());
+        $data = AppStatusPengajuan::create($request->all());
 
         return response()->json([
             'message' => 'Status berhasil ditambahkan',
@@ -43,7 +44,7 @@ class AppStatusController extends Controller
      */
     public function show($id)
     {
-        $data = AppStatus::all()->findOrFail($id);
+        $data = AppStatusPengajuan::all()->findOrFail($id);
 
         return response()->json($data);
     }
@@ -51,7 +52,7 @@ class AppStatusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(AppStatus $appStatus)
+    public function edit(AppStatusPengajuan $appStatus)
     {
         //
     }
@@ -59,7 +60,7 @@ class AppStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, AppStatus $appStatus)
+    public function update(Request $request, AppStatusPengajuan $appStatus)
     {
         $appStatus->update($request->all());
 
@@ -72,7 +73,7 @@ class AppStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AppStatus $appStatus)
+    public function destroy(AppStatusPengajuan $appStatus)
     {
         $appStatus->delete();
 

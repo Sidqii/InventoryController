@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AppPengajuanController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Get semua data AppPengajuan -> operator
      */
     public function index()
     {
@@ -31,7 +31,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Ajukan peminjaman barang by staff
      */
     public function store(Request $request)
     {
@@ -47,7 +47,7 @@ class AppPengajuanController extends Controller
 
         $pengajuan = AppPengajuan::create([
             'id_pengguna' => $validated['id_pengguna'],
-            'id_status' => 7,
+            'id_status' => 3,
             'instansi' => $validated['instansi'],
             'hal' => $validated['hal'],
             'tgl_pinjam' => $validated['tgl_pinjam'],
@@ -64,7 +64,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get semua data AppPengajuan dengan status 'Dipinjam' -> staff
      */
     public function show($id)
     {
@@ -75,14 +75,14 @@ class AppPengajuanController extends Controller
             'status',
             'riwayat'
         ])->where('id_pengguna', $id)->whereHas('status', function ($q) {
-            $q->where('status', 'Disetujui');
+            $q->where('status_pengajuan', 'Dipinjam');
         })->get();
 
         return response()->json($data);
     }
 
     /**
-     * Display the specified resource.
+     * Get semua data AppPengajuan -> staff
      */
     public function all($id)
     {
@@ -106,28 +106,24 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Ajukan pengembalian peminjaman barang
      */
-    public function update(Request $request, AppPengajuan $appPengajuan)
+    public function update($id)
     {
-        $validated = $request->validate([
-            'instansi' => 'nullable|string|max:255',
-            'hal' => 'nullable|string|max:255',
-            'tgl_pinjam' => 'nullable|date',
-            'tgl_kembali' => 'nullable|date|after_or_equal:tgl_pinjam',
-            'id_status' => 'nullable|exists:app_status,id',
-        ]);
+        try {
+            $pengajuan = AppPengajuan::with('unitBarang')->findOrFail($id);
+            $pengajuan->id_status = 5;
+            $pengajuan->save();
 
-        $appPengajuan->update($validated);
-
-        return response()->json([
-            'message' => 'Pengajuan berhasil diperbarui',
-            'data' => $appPengajuan->load([
-                'user',
-                'unitBarang.barang',
-                'status',
-            ])
-        ]);
+            return response()->json([
+                'message' => 'Pengembalian diajukan, menunggu verifikasi',
+                'data' => $pengajuan,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     /**

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_unit_barang')->constrained('app_unit_barang')->cascadeOnDelete();
             $table->foreignId('id_pengajuan')->nullable()->constrained('app_pengajuan')->nullOnDelete();
-            $table->foreignId('status_awal')->nullable()->constrained('app_status')->nullOnDelete();
-            $table->foreignId('status_baru')->nullable()->constrained('app_status')->nullOnDelete();
+            $table->foreignId('status_awal')->nullable()->constrained('app_status_unit')->nullOnDelete();
+            $table->foreignId('status_baru')->nullable()->constrained('app_status_unit')->nullOnDelete();
             $table->foreignId('lokasi_unit')->nullable()->constrained('app_lokasi')->nullOnDelete();
             $table->foreignId('oleh')->nullable()->constrained('app_users')->nullOnDelete();
             $table->text('catatan')->nullable();

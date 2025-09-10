@@ -15,7 +15,7 @@ class AppUnitBarangSeeder extends Seeder
     {
         $barang = DB::table('app_barang')->pluck('id', 'kode_barang'); // contoh: ['DRN-001' => 1, ...]
         $kep = DB::table('app_kepemilikan')->pluck('id', 'jenis_kepemilikan');
-        $status = DB::table('app_status')->pluck('id', 'status');
+        $status = DB::table('app_status_unit')->pluck('id', 'status_unit');
         $lokasi = DB::table('app_lokasi')->pluck('id', 'kode_lokasi');
         $kondisi = DB::table('app_kondisi')->pluck('id', 'kondisi');
 

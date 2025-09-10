@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('app_pengajuan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pengguna')->constrained('app_users')->cascadeOnDelete();
-            $table->foreignId('id_status')->constrained('app_status')->cascadeOnDelete();
+            $table->foreignId('id_status')->constrained('app_status_pengajuan')->cascadeOnDelete();
             $table->string('instansi')->nullable();
             $table->text('hal');
             $table->date('tgl_pinjam');

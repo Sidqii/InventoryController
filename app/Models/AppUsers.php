@@ -12,7 +12,7 @@ class AppUsers extends Authenticatable
 
     protected $table = 'app_users';
 
-    protected $fillable = ['nama', 'id_peran', 'email', 'password'];
+    protected $fillable = ['nama', 'id_peran', 'email', 'password', 'instansi'];
 
     protected $hidden = ['password'];
 

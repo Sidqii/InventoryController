@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('no_seri')->nullable();
             $table->foreignId('id_barang')->constrained('app_barang')->cascadeOnDelete();
             $table->foreignId('id_kepemilikan')->constrained('app_kepemilikan')->cascadeOnDelete();
-            $table->foreignId('id_status')->constrained('app_status')->cascadeOnDelete();
+            $table->foreignId('id_status')->constrained('app_status_unit')->cascadeOnDelete();
             $table->foreignId('id_lokasi')->constrained('app_lokasi')->cascadeOnDelete();
             $table->foreignId('id_kondisi')->constrained('app_kondisi')->cascadeOnDelete();
             $table->string('foto')->nullable();
