@@ -1,31 +1,28 @@
 <?php
 
-use App\Http\Controllers\AppPengembalian;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AppUnitBarangController;
 use App\Http\Controllers\AppBarangController;
 use App\Http\Controllers\AppJenisController;
 use App\Http\Controllers\AppKategoriController;
+use App\Http\Controllers\AppLoginController;
 use App\Http\Controllers\AppPengajuanController;
 use App\Http\Controllers\AppPengajuanUnitController;
-use App\Http\Controllers\AppPermissionsController;
 use App\Http\Controllers\AppPersetujuanController;
-use App\Http\Controllers\AppRiwayatStatusController;
+use App\Http\Controllers\AppRiwayatController;
 use App\Http\Controllers\AppRolesController;
-use App\Http\Controllers\AppTaskController;
 use App\Http\Controllers\AppUsersController;
 
 
 //login
-Route::post('/login', [AppTaskController::class, 'login']);
+Route::post('/login', [AppLoginController::class, 'login']);
 
 /**
  * index -> get semua data pengajuan => operator
  * store -> ajukan peminjaman => staff
  * update -> ajukan pengembalian => staff
  * show(id) -> get AppPengajuan by id (staffId) dengan status 'Dipinjam'
- * all(id) -> get AppPengajuan by id (staffId)
  */
 
 //pengajuan dan pengembalian barang
@@ -39,39 +36,32 @@ Route::apiResource('/pengajuan', AppPengajuanController::class);
 Route::apiResource('/persetujuan', AppPersetujuanController::class);
 
 //riwayat -> all role
-Route::get('/riwayat/{id}', [AppPengajuanController::class, 'all']);
-
-// //persetujuan pengajuan -> staff
-// Route::post('/pengajuan/{id}/persetujuan', [AppTaskController::class, 'persetujuan']);
-
-// //pengembalian peminjaman -> staff
-// Route::post('pengajuan/{id}/ajukan-pengembalian', [AppTaskController::class, 'ajukanPengembalian']);
-
-// //proses pengembalian peminjaman -> operator
-// Route::post('pengajuan/{id}/proses-pengembalian', [AppTaskController::class, 'prosesPengembalian']);
-
-//get pengembalian -> all role
-Route::get('/pengembalian', [AppTaskController::class, 'indexRiwayat']);
-Route::get('/pengembalian/{id}', [AppTaskController::class, 'showPengembalian']);
+Route::apiResource('/riwayat', AppRiwayatController::class);
 
 //user data -> all role
 Route::apiResource('/user', AppUsersController::class);
 Route::apiResource('/role', AppRolesController::class);
 
-//peran akses pengguna
-Route::apiResource('/perm', AppPermissionsController::class);
+/**
+ * index -> semua data barang
+ * store -> tambah data barang
+ * show -> ambil data barang by id
+ * update -> edit data barang
+ */
 
-// //update barang -> operator, admin
-// Route::post('/store', [AppBarangController::class, 'store']);
-// Route::put('/update/{id}', [AppBarangController::class, 'update']);
+//data barang
+Route::apiResource('/barang', AppBarangController::class);
 
-//data barang -> all role
-Route::get('/barang', [AppBarangController::class, 'index']);
-Route::get('/barang/{id}', [AppBarangController::class, 'show']);
+/**
+ * index -> semua data barang => operator
+ * store -> tambah data barang => operator
+ * show -> ambil data barang by id
+ * update -> update data barang => operator
+ */
 
-//data unit barang -> all role
-Route::get('/staff/unit', [AppUnitBarangController::class, 'indexStaff']);
+//edit data dan get unit barang
 Route::apiResource('/unit', AppUnitBarangController::class);
+Route::get('/staff/unit', [AppUnitBarangController::class, 'indexStaff']);
 
 //lainnya
 Route::apiResource('/jenis', AppJenisController::class);

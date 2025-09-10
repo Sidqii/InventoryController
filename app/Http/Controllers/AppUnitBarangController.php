@@ -36,8 +36,6 @@ class AppUnitBarangController extends Controller
             'status',
             'lokasi',
             'kondisi',
-            // 'pengajuan',
-            // 'riwayat',
         ])->where('id_status', 1)->get();
 
         return response()->json($data);

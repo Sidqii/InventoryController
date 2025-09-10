@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AppPengajuanController extends Controller
 {
     /**
-     * Get semua data AppPengajuan -> operator
+     * semua riwayat peminjaman barang
      */
     public function index()
     {
@@ -23,7 +23,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     *
      */
     public function create()
     {
@@ -31,7 +31,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Ajukan peminjaman barang by staff
+     * pengajuan peminjaman barang oleh staff
      */
     public function store(Request $request)
     {
@@ -64,7 +64,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Get semua data AppPengajuan dengan status 'Dipinjam' -> staff
+     * riwayat peminjaman dengan status hanya Dipinjam by id (staff)
      */
     public function show($id)
     {
@@ -82,23 +82,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Get semua data AppPengajuan -> staff
-     */
-    public function all($id)
-    {
-        $data = AppPengajuan::with([
-            'user',
-            'unitBarang.barang',
-            'unitBarang.kondisi',
-            'status',
-            'riwayat'
-        ])->where('id_pengguna', $id)->get();
-
-        return response()->json($data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
+     *
      */
     public function edit(AppPengajuan $appPengajuan)
     {
@@ -106,7 +90,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Ajukan pengembalian peminjaman barang
+     * pengajuan pengembalian barang
      */
     public function update($id)
     {
@@ -127,7 +111,7 @@ class AppPengajuanController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * masih lom tau wat apa ges
      */
     public function destroy(AppPengajuan $appPengajuan)
     {

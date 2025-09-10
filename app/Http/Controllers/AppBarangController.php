@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AppBarangController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * ambil semua data barang
      */
     public function index()
     {
@@ -18,15 +18,7 @@ class AppBarangController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * tambah data barang
      */
     public function store(Request $request)
     {
@@ -39,7 +31,7 @@ class AppBarangController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * ambil data barang by id
      */
     public function show($id)
     {
@@ -49,15 +41,7 @@ class AppBarangController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AppBarang $appBarang)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * update data barang untuk operator
      */
     public function update(Request $request, $id)
     {
@@ -82,7 +66,7 @@ class AppBarangController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * gatau juga wat apaan masih bingung
      */
     public function destroy(AppBarang $appBarang)
     {
