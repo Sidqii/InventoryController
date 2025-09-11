@@ -22,4 +22,40 @@ class AppRiwayatController extends Controller
 
         return response()->json($data, 200);
     }
+
+    /**
+     * riwayat pengajuan untuk operator
+     */
+    public function indexApp()
+    {
+        $data = AppPengajuan::with([
+            'user',
+            'unitBarang.barang',
+            'unitBarang.kondisi',
+            'status',
+            'riwayat'
+        ])->whereHas('status', function ($query) {
+            $query->where('status_pengajuan', 'Pengajuan');
+        })->get();
+
+        return response()->json($data);
+    }
+
+    /**
+     * riwayat pengembalian untuk operator
+     */
+    public function indexRtt()
+    {
+        $data = AppPengajuan::with([
+            'user',
+            'unitBarang.barang',
+            'unitBarang.kondisi',
+            'status',
+            'riwayat'
+        ])->whereHas('status', function ($query) {
+            $query->where('status_pengajuan', 'Pengembalian');
+        })->get();
+
+        return response()->json($data);
+    }
 }

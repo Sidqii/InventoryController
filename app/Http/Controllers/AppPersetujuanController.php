@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class AppPersetujuanController extends Controller
 {
+    /**
+     * persetujuan pengajuan peminjaman dan pengembalian
+     */
     public function update(Request $request, $id)
     {
         try {

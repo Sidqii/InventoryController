@@ -35,12 +35,17 @@ Route::apiResource('/pengajuan', AppPengajuanController::class);
 //proses pengajuan dan pengembalian
 Route::apiResource('/persetujuan', AppPersetujuanController::class);
 
-//riwayat -> all role
-Route::apiResource('/riwayat', AppRiwayatController::class);
+/**
+ * riwayat untuk operator
+ * show untuk get by id pengguna (staff)
+ * indexApp riwayat by status pengajuan
+ * indexRtt riwayat by status pengembalian
+ */
 
-//user data -> all role
-Route::apiResource('/user', AppUsersController::class);
-Route::apiResource('/role', AppRolesController::class);
+//riwayat
+Route::get('/riwayat/{id}', [AppRiwayatController::class, 'show']);
+Route::get('/app/riwayat', [AppRiwayatController::class, 'indexApp']);
+Route::get('/rtt/riwayat', [AppRiwayatController::class, 'indexRtt']);
 
 /**
  * index -> semua data barang
@@ -61,9 +66,13 @@ Route::apiResource('/barang', AppBarangController::class);
 
 //edit data dan get unit barang
 Route::apiResource('/unit', AppUnitBarangController::class);
+
+//get data unit barang untuk staff
 Route::get('/staff/unit', [AppUnitBarangController::class, 'indexStaff']);
 
 //lainnya
+Route::apiResource('/user', AppUsersController::class);
+Route::apiResource('/role', AppRolesController::class);
 Route::apiResource('/jenis', AppJenisController::class);
 Route::apiResource('/kategori', AppKategoriController::class);
 Route::apiResource('/unit_pengajuan', AppPengajuanUnitController::class);
