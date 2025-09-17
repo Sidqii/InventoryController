@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AppPengajuan;
+use App\Models\AppRiwayatStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppPengembalian extends Controller
 {
@@ -12,21 +14,51 @@ class AppPengembalian extends Controller
         //
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
         try {
+            $request->validate([
+                'unit' => 'required|array',
+                'unit.*.id_unit' => 'required|integer|exists:app_unit_barang,id',
+                'unit.*.status_baru' => 'required|integer|exists:app_status_unit,id',
+                'unit.*.catatan' => 'nullable|string'
+            ]);
+
             $pengajuan = AppPengajuan::with('unitBarang')->findOrFail($id);
-            $pengajuan->id_status = 1;
-            $pengajuan->save();
+
+            foreach ($request->unit as $u) {
+                $unit = $pengajuan->unitBarang->where('id', $u['id_unit'])->firstOrFail();
+                $statusAwal = $unit->id_status;
+
+                $unit->id_status = $u['status_baru'];
+                $unit->save();
+
+                AppRiwayatStatus::create([
+                    'id_unit_barang' => $unit->id,
+                    'id_pengajuan' => $pengajuan->id,
+                    'status_awal' => $statusAwal,
+                    'status_baru' => $u['status_baru'],
+                    'lokasi_unit' => $unit->id_lokasi,
+                    'oleh' => Auth::id(),
+                    'catatan' => $u['catatan'] ?? null,
+                ]);
+            }
+
+            $onPinjam = $pengajuan->unitBarang->where('id_status', 2)->count();
+
+            if ($onPinjam === 0) {
+                $pengajuan->id_status = 6;
+                $pengajuan->save();
+            }
 
             return response()->json([
-                'message' => 'Pengembalian diajukan, menunggu verfikasi',
-                'data' => $pengajuan,
-            ]);
+                'message' => 'Pengembalian berhasil diproses',
+                'data' => $pengajuan->load('unitBarang')
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 

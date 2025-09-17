@@ -9,6 +9,7 @@ use App\Http\Controllers\AppKategoriController;
 use App\Http\Controllers\AppLoginController;
 use App\Http\Controllers\AppPengajuanController;
 use App\Http\Controllers\AppPengajuanUnitController;
+use App\Http\Controllers\AppPengembalian;
 use App\Http\Controllers\AppPersetujuanController;
 use App\Http\Controllers\AppRiwayatController;
 use App\Http\Controllers\AppRolesController;
@@ -32,11 +33,14 @@ Route::apiResource('/pengajuan', AppPengajuanController::class);
  * update -> proses pengajuan peminjaman/pengembalian
  */
 
-//proses pengajuan dan pengembalian
+//proses pengajuan dan penolakan
 Route::apiResource('/persetujuan', AppPersetujuanController::class);
 
+//proses pengembalian peminjaman
+Route::apiResource('/pengembalian', AppPengembalian::class);
+
 /**
- * riwayat untuk operator
+ * (index) riwayat untuk operator
  * show untuk get by id pengguna (staff)
  * indexApp riwayat by status pengajuan
  * indexRtt riwayat by status pengembalian
