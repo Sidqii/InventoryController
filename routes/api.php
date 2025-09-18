@@ -47,6 +47,7 @@ Route::apiResource('/pengembalian', AppPengembalian::class);
  */
 
 //riwayat
+Route::apiResource('/riwayat', AppRiwayatController::class);
 Route::get('/riwayat/{id}', [AppRiwayatController::class, 'show']);
 Route::get('/app/riwayat', [AppRiwayatController::class, 'indexApp']);
 Route::get('/rtt/riwayat', [AppRiwayatController::class, 'indexRtt']);
