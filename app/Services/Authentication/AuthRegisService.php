@@ -13,13 +13,11 @@ class AuthRegisService
     public function register(array $data)
     {
         return DB::transaction(function () use ($data) {
-            $data['password'] = Hash::make($data['password']);
-
             $data['code'] = $this->generateCode();
 
             $user = User::create($data);
 
-            $emplRole = Role::where('code', 'employee')->firstOrFail();
+            $emplRole = Role::where('code', 'EMPLOYEE')->firstOrFail();
 
             if (!$emplRole) {
                 throw new Exception('Registration cannot be continued');

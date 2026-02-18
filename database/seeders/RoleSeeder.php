@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\RBAC\Role;
 use Illuminate\Database\Seeder;
 
+use function Symfony\Component\Clock\now;
+
 class RoleSeeder extends Seeder
 {
     /**
@@ -13,9 +15,9 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         Role::insert([
-            ['code' => 'ADMIN'],
-            ['code' => 'OPERATOR'],
-            ['code' => 'EMPLOYEE'],
+            ['code' => 'ADMIN', 'created_at' => now(), 'updated_at' => now()],
+            ['code' => 'OPERATOR', 'created_at' => now(), 'updated_at' => now()],
+            ['code' => 'EMPLOYEE', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->text('note')->nullable();
 
             $table->foreignId('approved_by')
+                ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
 
