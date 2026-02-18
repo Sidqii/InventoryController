@@ -20,4 +20,14 @@ class Role extends Model
             'user_id',
         );
     }
+
+    public function perms()
+    {
+        return $this->belongsToMany(
+            Permission::class,
+            'perm_role',
+            'role_id',
+            'perm_id'
+        );
+    }
 }

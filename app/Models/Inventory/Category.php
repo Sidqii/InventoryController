@@ -10,6 +10,11 @@ class Category extends Model
     use SoftDeletes;
     protected $table = 'inven_category';
 
+    protected $fillable = [
+        'code',
+        'name',
+    ];
+
     public function products()
     {
         return $this->hasMany(Product::class, 'category_id');

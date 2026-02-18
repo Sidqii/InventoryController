@@ -6,6 +6,7 @@ use App\Models\Inventory\StockMovement;
 use App\Models\RBAC\Role;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use \Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -29,6 +30,11 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
     }
 
     public function roles()
