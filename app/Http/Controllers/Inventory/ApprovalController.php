@@ -15,7 +15,7 @@ class ApprovalController extends Controller
             $approved = $service->approval(
                 $id,
                 $request->action,
-                request()->user()->id
+                $request->user()
             );
 
             return ResponseJson::success([

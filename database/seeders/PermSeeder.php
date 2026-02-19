@@ -19,6 +19,7 @@ class PermSeeder extends Seeder
             ['code' => 'update_item', 'created_at' => now(), 'updated_at' => now()],
             ['code' => 'delete_item', 'created_at' => now(), 'updated_at' => now()],
             ['code' => 'request_item', 'created_at' => now(), 'updated_at' => now()],
+            ['code' => 'approve_item', 'created_at' => now(), 'updated_at' => now()],
             ['code' => 'observe_item', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }

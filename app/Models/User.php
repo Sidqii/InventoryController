@@ -51,4 +51,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(StockMovement::class, 'executed_by');
     }
+
+    public function hasPermission(string $permCode)
+    {
+        return $this->roles()->whereHas(
+            'perms',
+            function ($query) use ($permCode) {
+                $query->where('code', $permCode);
+            }
+        )->exists();
+    }
 }

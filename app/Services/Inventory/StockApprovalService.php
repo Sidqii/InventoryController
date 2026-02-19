@@ -3,6 +3,8 @@
 namespace App\Services\Inventory;
 
 use App\Models\Inventory\StockRequest;
+use App\Models\User;
+use App\Services\Authorization\AuthorizationService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -10,9 +12,18 @@ use function Symfony\Component\Clock\now;
 
 class StockApprovalService
 {
-    public function approval(int $request, string $action, int $approved)
+    protected AuthorizationService $authorizationService;
+
+    public function __construct(AuthorizationService $authorizationService)
     {
-        return DB::transaction(function () use ($action, $request, $approved) {
+        $this->authorizationService = $authorizationService;
+    }
+
+    public function approval(int $request, string $action, User $user)
+    {
+        $this->authorizationService->authorize($user, 'update_item');
+
+        return DB::transaction(function () use ($action, $request, $user) {
             $data = StockRequest::lockForUpdate()->findOrFail($request);
 
             if ($data->status !== 'PENDING') {
@@ -24,7 +35,7 @@ class StockApprovalService
                     'product_id' => $data->product_id,
                     'type' => $data->request_type,
                     'quantity' => $data->quantity,
-                    'executed_by' => $approved,
+                    'executed_by' => $user->id,
                     'references_type' => 'STOCK_REQUEST',
                     'references_id' => $data->id,
                     'note' => $data->note,
@@ -32,13 +43,13 @@ class StockApprovalService
 
                 $data->update([
                     'status' => 'APPROVED',
-                    'approved_by' => $approved,
+                    'approved_by' => $user->id,
                     'approved_at' => now()
                 ]);
             } elseif ($action === 'REJECT') {
                 $data->update([
                     'status' => 'REJECTED',
-                    'approved_by' => $approved,
+                    'approved_by' => $user->id,
                     'approved_at' => now()
                 ]);
             } else {
